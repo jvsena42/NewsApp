@@ -11,7 +11,7 @@ class NewsRemoteDataSourceImpl(
         private val page:Int
 ): NewsRemoteDataSource {
     override suspend fun getTopHeadLines(): Response<NewsResponse> {
-        return newsAPIService.getTopHeadLines(country,page)
+        return newsAPIService.getTopHeadlines(country,page)
     }
 
 }
