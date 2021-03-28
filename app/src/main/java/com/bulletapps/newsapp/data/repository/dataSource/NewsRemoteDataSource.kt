@@ -4,5 +4,5 @@ import com.bulletapps.newsapp.data.model.NewsResponse
 import retrofit2.Response
 
 interface NewsRemoteDataSource {
-    suspend fun getTopHeadLines(): Response<NewsResponse>
+    suspend fun getTopHeadLines(country:String, page:Int): Response<NewsResponse>
 }

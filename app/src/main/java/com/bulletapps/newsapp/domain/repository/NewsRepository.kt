@@ -6,7 +6,7 @@ import com.bulletapps.newsapp.data.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    suspend fun getNewsHeadlines():Resource<NewsResponse>
+    suspend fun getNewsHeadlines(country: String, page: Int):Resource<NewsResponse>
     suspend fun getSearchedNews(searchQuery:String):Resource<NewsResponse>
 
     suspend fun saveNews(article: Article)
