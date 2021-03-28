@@ -1,4 +1,4 @@
-package com.bulletapps.newsapp.data.repository.DataSourceImpl
+package com.bulletapps.newsapp.data.repository.datasourceimpl
 
 import com.bulletapps.newsapp.data.api.NewsAPIService
 import com.bulletapps.newsapp.data.model.NewsResponse
