@@ -62,7 +62,6 @@ class NewsViewModel(
             }
         }
         return false
-
     }
 
 }

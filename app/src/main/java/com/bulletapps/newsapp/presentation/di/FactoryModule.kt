@@ -12,7 +12,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class FactoryModule {
-
     @Singleton
     @Provides
     fun providesNewsViewModelFactory(
