@@ -1,5 +1,6 @@
 package com.bulletapps.newsapp.presentation.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -42,6 +43,18 @@ class NewsAdapter:RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
             binding.tvPublishedAt.text = article.publishedAt
             binding.tvSource.text = article.source?.name
             binding.ivArticleImage.loadImage(article.urlToImage)
+
+            binding.root.setOnClickListener{
+                onItemClickListener?.let {
+                    it(article)
+                }
+            }
         }
+    }
+
+    private var onItemClickListener:((Article)->Unit)? = null
+
+    fun setOnItemClickListener(listener:(Article)->Unit){
+        onItemClickListener = listener
     }
 }

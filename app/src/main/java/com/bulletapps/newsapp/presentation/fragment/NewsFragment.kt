@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bulletapps.newsapp.R
@@ -88,6 +89,13 @@ class NewsFragment : Fragment() {
         binding.rvNews.setHasFixedSize(true)
         binding.rvNews.layoutManager = LinearLayoutManager(requireContext())
         binding.rvNews.addOnScrollListener(this@NewsFragment.onScrollListener)
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply{
+                putSerializable("selected_article",it)
+            }
+            findNavController().navigate(R.id.action_newsFragment_to_infoFragment,bundle)
+        }
     }
 
     private fun showProgressBar(){

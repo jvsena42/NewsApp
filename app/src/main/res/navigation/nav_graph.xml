@@ -25,7 +25,11 @@
     </fragment>
     <fragment
         android:id="@+id/infoFragment"
-        android:name="com.bulletapps.newsapp.InfoFragment"
+        android:name="com.bulletapps.newsapp.presentation.fragment.InfoFragment"
         android:label="fragment_info"
-        tools:layout="@layout/fragment_info" />
+        tools:layout="@layout/fragment_info" >
+        <argument
+            android:name="selected_article"
+            app:argType="com.bulletapps.newsapp.data.model.Article" />
+    </fragment>
 </navigation>
