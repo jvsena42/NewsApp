@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bulletapps.newsapp.R
+import com.bulletapps.newsapp.presentation.adapter.NewsAdapter
 import com.bulletapps.newsapp.presentation.viewmodel.NewsViewModel
 import com.bulletapps.newsapp.presentation.viewmodel.NewsViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +21,8 @@ class NewsActivity : AppCompatActivity() {
     @Inject
     lateinit var factory: NewsViewModelFactory
     lateinit var mainViewModel:NewsViewModel
+    @Inject
+    lateinit var newsAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
