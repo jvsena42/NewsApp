@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bulletapps.newsapp.R
+import com.bulletapps.newsapp.data.model.NewsResponse
 import com.bulletapps.newsapp.data.util.Resource
 import com.bulletapps.newsapp.data.util.viewGone
 import com.bulletapps.newsapp.data.util.viewVisible
@@ -21,6 +24,12 @@ class NewsFragment : Fragment() {
     private lateinit var mViewModel: NewsViewModel
     private lateinit var binding: FragmentNewsBinding
     private lateinit var newsAdapter: NewsAdapter
+
+    private var isScrolling = false
+    private var page = 1
+    private var isLoading = false
+    private var isLastPage = false
+    private var pages = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,13 +49,15 @@ class NewsFragment : Fragment() {
     }
 
     private fun viewNewsList() {
-        mViewModel.getNewsHeadLines("br",1)
+        mViewModel.getNewsHeadLines("br",page)
         mViewModel.newsHeadLines.observe(viewLifecycleOwner, {
             when (it) {
                 is Resource.Success -> {
                     hideProgressBar()
                     it.data?.let {
                         newsAdapter.differ.submitList(it.articles?.toList())
+
+                        checkLastPage(it)
                     }
                 }
                 is Resource.Loading -> {
@@ -63,17 +74,56 @@ class NewsFragment : Fragment() {
         })
     }
 
+    private fun checkLastPage(it: NewsResponse) {
+        if (it.totalResults!! % 20 == 0) {
+            pages = it.totalResults?.div(20)!!
+        } else {
+            pages = it.totalResults?.div(20)?.plus(1)!!
+        }
+        isLastPage = page == pages
+    }
+
     private fun initRecyclerView() {
         binding.rvNews.adapter = newsAdapter
         binding.rvNews.setHasFixedSize(true)
         binding.rvNews.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvNews.addOnScrollListener(this@NewsFragment.onScrollListener)
     }
 
     private fun showProgressBar(){
+        isLoading = true
         binding.progressBar.viewVisible()
     }
 
     private fun hideProgressBar(){
+        isLoading = false
         binding.progressBar.viewGone()
+    }
+
+    private val onScrollListener = object : RecyclerView.OnScrollListener(){
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                isScrolling = true
+            }
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = binding.rvNews.layoutManager as LinearLayoutManager
+            val sizeCurrentList = layoutManager.itemCount
+            val visibleItems = layoutManager.childCount
+
+            //Position of the star item of the current visible items
+            val topPosition = layoutManager.findFirstVisibleItemPosition()
+
+            val hasReachedToEnd = topPosition+visibleItems >= sizeCurrentList
+            val shouldPaginate = !isLoading && !isLastPage && hasReachedToEnd && isScrolling
+            if (shouldPaginate){
+                page++
+                mViewModel.getNewsHeadLines("br",page)
+                isScrolling = false
+            }
+        }
     }
 }
