@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,9 @@ import com.bulletapps.newsapp.databinding.FragmentNewsBinding
 import com.bulletapps.newsapp.presentation.activity.NewsActivity
 import com.bulletapps.newsapp.presentation.adapter.NewsAdapter
 import com.bulletapps.newsapp.presentation.viewmodel.NewsViewModel
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class NewsFragment : Fragment() {
@@ -47,6 +51,7 @@ class NewsFragment : Fragment() {
         newsAdapter = (activity as NewsActivity).newsAdapter
         initRecyclerView()
         viewNewsList()
+        setSearchView()
     }
 
     private fun viewNewsList() {
@@ -133,5 +138,52 @@ class NewsFragment : Fragment() {
                 isScrolling = false
             }
         }
+    }
+
+    private fun setSearchView(){
+        binding.svNews.setOnQueryTextListener(
+            object :SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    mViewModel.searchNews("br",p0.toString(),page)
+                    viewNewsList()
+                    return false
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    MainScope().launch {
+                        delay(2000)
+                        mViewModel.searchNews("br",p0.toString(),page)
+                        viewNewsList()
+                    }
+                    return false
+                }
+
+            }
+        )
+    }
+
+    private fun viewSearchedNews() {
+        mViewModel.searchedNews.observe(viewLifecycleOwner, {
+            when (it) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    it.data?.let {
+                        newsAdapter.differ.submitList(it.articles?.toList())
+
+                        checkLastPage(it)
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    it.message?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+        })
     }
 }
