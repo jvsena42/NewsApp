@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.bulletapps.newsapp.presentation.fragment.NewsFragment"
-        android:label="fragment_news"
-        tools:layout="@layout/fragment_news" >
+        tools:layout="@layout/fragment_news">
         <action
             android:id="@+id/action_newsFragment_to_infoFragment"
             app:destination="@id/infoFragment" />
@@ -17,8 +16,7 @@
     <fragment
         android:id="@+id/savedNewsFragment"
         android:name="com.bulletapps.newsapp.presentation.fragment.SavedNewsFragment"
-        android:label="fragment_saved_news"
-        tools:layout="@layout/fragment_saved_news" >
+        tools:layout="@layout/fragment_saved_news">
         <action
             android:id="@+id/action_savedNewsFragment_to_infoFragment"
             app:destination="@id/infoFragment" />
@@ -26,8 +24,7 @@
     <fragment
         android:id="@+id/infoFragment"
         android:name="com.bulletapps.newsapp.presentation.fragment.InfoFragment"
-        android:label="fragment_info"
-        tools:layout="@layout/fragment_info" >
+        tools:layout="@layout/fragment_info">
         <argument
             android:name="selected_article"
             app:argType="com.bulletapps.newsapp.data.model.Article" />

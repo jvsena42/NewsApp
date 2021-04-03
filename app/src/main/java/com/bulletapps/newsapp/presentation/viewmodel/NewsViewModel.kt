@@ -11,20 +11,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bulletapps.newsapp.data.model.NewsResponse
 import com.bulletapps.newsapp.data.util.Resource
+import com.bulletapps.newsapp.data.util.isNetworkAvailable
 import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
+import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
         private val app: Application,
-        private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+        private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+        private val getSearchedNewsUseCase: GetSearchedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
 
     fun getNewsHeadLines(country: String, page: Int) = viewModelScope.launch(Dispatchers.IO) {
         newsHeadLines.postValue(Resource.Loading())
         try{
-            if(isNetworkAvailable(app)) {
+            if(app.isNetworkAvailable()) {
                 val apiResult = getNewsHeadlinesUseCase.execute(country, page)
                 newsHeadLines.postValue(apiResult)
             }else{
@@ -37,7 +40,7 @@ class NewsViewModel(
 
     }
 
-    private fun isNetworkAvailable(context: Context?):Boolean{
+    /*private fun isNetworkAvailable(context: Context?):Boolean{
         if (context == null) return false
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -62,6 +65,28 @@ class NewsViewModel(
             }
         }
         return false
+    }*/
+
+    //Search
+    val searchedNews:MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+
+    fun searchNews(
+        country: String,
+        searchQuery:String,
+        page: Int
+    )= viewModelScope.launch {
+        searchedNews.postValue(Resource.Loading())
+        try {
+            if(app.isNetworkAvailable()){
+                val response = getSearchedNewsUseCase.execute(country,searchQuery,page)
+                searchedNews.postValue(response)
+            }else{
+                searchedNews.postValue(Resource.Error("No internet connection"))
+            }
+        }catch (e:Exception){
+            searchedNews.postValue(Resource.Error(e.message.toString()))
+        }
+
     }
 
 }
