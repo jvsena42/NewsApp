@@ -145,7 +145,7 @@ class NewsFragment : Fragment() {
             object :SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     mViewModel.searchNews("br",p0.toString(),page)
-                    viewNewsList()
+                    viewSearchedNews()
                     return false
                 }
 
@@ -153,13 +153,19 @@ class NewsFragment : Fragment() {
                     MainScope().launch {
                         delay(2000)
                         mViewModel.searchNews("br",p0.toString(),page)
-                        viewNewsList()
+                        viewSearchedNews()
                     }
                     return false
                 }
 
             }
         )
+
+        binding.svNews.setOnCloseListener {
+            initRecyclerView()
+            viewNewsList()
+            false
+        }
     }
 
     private fun viewSearchedNews() {
