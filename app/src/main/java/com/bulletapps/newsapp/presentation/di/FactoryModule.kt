@@ -1,10 +1,7 @@
 package com.bulletapps.newsapp.presentation.di
 
 import android.app.Application
-import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
+import com.bulletapps.newsapp.domain.usecase.*
 import com.bulletapps.newsapp.presentation.viewmodel.NewsViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -23,11 +20,15 @@ class FactoryModule {
         getSearchedNewsUseCase: GetSearchedNewsUseCase,
         saveNewsUseCase: SaveNewsUseCase,
         getSavedNewsUseCase: GetSavedNewsUseCase,
-    ):NewsViewModelFactory{
-        return NewsViewModelFactory(application,
+        deleteSavedNewsUseCase: DeleteSavedNewsUseCase
+    ): NewsViewModelFactory {
+        return NewsViewModelFactory(
+            application,
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
             saveNewsUseCase,
-            getSavedNewsUseCase)
+            getSavedNewsUseCase,
+            deleteSavedNewsUseCase
+        )
     }
 }

@@ -3,10 +3,7 @@ package com.bulletapps.newsapp.presentation.viewmodel
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
+import com.bulletapps.newsapp.domain.usecase.*
 
 class NewsViewModelFactory(
     private val app: Application,
@@ -14,6 +11,7 @@ class NewsViewModelFactory(
     private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
     private val saveNewsUseCase: SaveNewsUseCase,
     private val getSavedNewsUseCase: GetSavedNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
     ): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return NewsViewModel(
@@ -21,7 +19,8 @@ class NewsViewModelFactory(
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
             saveNewsUseCase,
-            getSavedNewsUseCase
+            getSavedNewsUseCase,
+            deleteSavedNewsUseCase
         ) as T
     }
 }

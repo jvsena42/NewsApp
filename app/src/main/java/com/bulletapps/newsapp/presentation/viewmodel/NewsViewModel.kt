@@ -10,10 +10,7 @@ import com.bulletapps.newsapp.data.model.Article
 import com.bulletapps.newsapp.data.model.NewsResponse
 import com.bulletapps.newsapp.data.util.Resource
 import com.bulletapps.newsapp.data.util.isNetworkAvailable
-import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
+import com.bulletapps.newsapp.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -23,7 +20,8 @@ class NewsViewModel(
         private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
         private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
         private val saveNewsUseCase: SaveNewsUseCase,
-        private val getSavedNewsUseCase: GetSavedNewsUseCase
+        private val getSavedNewsUseCase: GetSavedNewsUseCase,
+        private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
 
@@ -75,6 +73,10 @@ class NewsViewModel(
         getSavedNewsUseCase.execute().collect {
             emit(it)
         }
+    }
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        deleteSavedNewsUseCase.execute(article)
     }
 
 }

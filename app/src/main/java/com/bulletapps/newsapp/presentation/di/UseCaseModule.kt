@@ -1,10 +1,7 @@
 package com.bulletapps.newsapp.presentation.di
 
 import com.bulletapps.newsapp.domain.repository.NewsRepository
-import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
-import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
+import com.bulletapps.newsapp.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,5 +42,13 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ):GetSavedNewsUseCase{
         return GetSavedNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesDeleteNewsUseCase(
+        newsRepository: NewsRepository
+    ):DeleteSavedNewsUseCase{
+        return DeleteSavedNewsUseCase(newsRepository)
     }
 }
