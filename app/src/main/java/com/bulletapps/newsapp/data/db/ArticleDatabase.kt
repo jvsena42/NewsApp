@@ -13,5 +13,5 @@ import com.bulletapps.newsapp.data.model.Article
 @TypeConverters(Converters::class)
 abstract class ArticleDatabase:RoomDatabase() {
 
-    abstract fun getArticleDAO():Article
+    abstract fun getArticleDAO():ArticleDAO
 }

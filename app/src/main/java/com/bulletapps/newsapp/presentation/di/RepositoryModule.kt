@@ -1,6 +1,7 @@
 package com.bulletapps.newsapp.presentation.di
 
 import com.bulletapps.newsapp.data.repository.NewsRepositoryImpl
+import com.bulletapps.newsapp.data.repository.dataSource.NewsLocalDataSource
 import com.bulletapps.newsapp.data.repository.dataSource.NewsRemoteDataSource
 import com.bulletapps.newsapp.domain.repository.NewsRepository
 import dagger.Module
@@ -16,8 +17,10 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideNewsRepository(
-        newsRemoteDataSource: NewsRemoteDataSource):NewsRepository{
-        return NewsRepositoryImpl(newsRemoteDataSource)
+        newsRemoteDataSource: NewsRemoteDataSource,
+        newsLocalDataSource: NewsLocalDataSource
+    ):NewsRepository{
+        return NewsRepositoryImpl(newsRemoteDataSource,newsLocalDataSource)
     }
 
 }
