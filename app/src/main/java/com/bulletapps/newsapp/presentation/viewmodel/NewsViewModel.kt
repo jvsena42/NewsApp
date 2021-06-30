@@ -5,25 +5,25 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.bulletapps.newsapp.data.model.Article
 import com.bulletapps.newsapp.data.model.NewsResponse
 import com.bulletapps.newsapp.data.util.Resource
 import com.bulletapps.newsapp.data.util.isNetworkAvailable
 import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
+import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
 import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
 import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
         private val app: Application,
         private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
         private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
-        private val saveNewsUseCase: SaveNewsUseCase
+        private val saveNewsUseCase: SaveNewsUseCase,
+        private val getSavedNewsUseCase: GetSavedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
 
@@ -69,6 +69,12 @@ class NewsViewModel(
     //local data
     fun saveArticle(article: Article) = viewModelScope.launch {
         saveNewsUseCase.execute(article)
+    }
+
+    fun getSavedNews() = liveData {
+        getSavedNewsUseCase.execute().collect {
+            emit(it)
+        }
     }
 
 }

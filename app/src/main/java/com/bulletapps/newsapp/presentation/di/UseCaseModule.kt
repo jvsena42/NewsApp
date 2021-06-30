@@ -2,6 +2,7 @@ package com.bulletapps.newsapp.presentation.di
 
 import com.bulletapps.newsapp.domain.repository.NewsRepository
 import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
+import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
 import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
 import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
 import dagger.Module
@@ -36,5 +37,13 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ):SaveNewsUseCase{
         return SaveNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesGetSavedNewsUseCase(
+        newsRepository: NewsRepository
+    ):GetSavedNewsUseCase{
+        return GetSavedNewsUseCase(newsRepository)
     }
 }

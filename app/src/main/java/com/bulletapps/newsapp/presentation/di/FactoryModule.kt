@@ -2,6 +2,7 @@ package com.bulletapps.newsapp.presentation.di
 
 import android.app.Application
 import com.bulletapps.newsapp.domain.usecase.GetNewsHeadlinesUseCase
+import com.bulletapps.newsapp.domain.usecase.GetSavedNewsUseCase
 import com.bulletapps.newsapp.domain.usecase.GetSearchedNewsUseCase
 import com.bulletapps.newsapp.domain.usecase.SaveNewsUseCase
 import com.bulletapps.newsapp.presentation.viewmodel.NewsViewModelFactory
@@ -20,8 +21,13 @@ class FactoryModule {
         application: Application,
         getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
         getSearchedNewsUseCase: GetSearchedNewsUseCase,
-        saveNewsUseCase: SaveNewsUseCase
+        saveNewsUseCase: SaveNewsUseCase,
+        getSavedNewsUseCase: GetSavedNewsUseCase,
     ):NewsViewModelFactory{
-        return NewsViewModelFactory(application,getNewsHeadlinesUseCase,getSearchedNewsUseCase,saveNewsUseCase)
+        return NewsViewModelFactory(application,
+            getNewsHeadlinesUseCase,
+            getSearchedNewsUseCase,
+            saveNewsUseCase,
+            getSavedNewsUseCase)
     }
 }
